@@ -69,10 +69,6 @@ Button:focus {
     outline: solid #31ffa8;
 }
 
-Button:active {
-    background: #0b2a18;
-}
-
 Button:disabled {
     background: #020703;
     color: #0d3a22;
