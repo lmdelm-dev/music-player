@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enigmatic-player"
+version = "0.1.0"
+description = "Enigmatic Player — a cute, colorful TUI music player for the terminal"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "syx" }]
+keywords = ["music", "player", "tui", "youtube", "mpv", "terminal"]
+classifiers = [
+    "Environment :: Console",
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+    "Programming Language :: Python :: 3",
+]
+
+dependencies = [
+    "textual>=0.60",
+    "mutagen>=1.47",
+    "platformdirs>=4.0",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+youtube = ["ytmusicapi>=1.4", "yt-dlp>=2026.8.19"]
+art = ["pillow>=10"]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+    "build>=1.0",
+]
+
+[project.scripts]
+enigmatic = "enigmatic_player.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501", "E731"]

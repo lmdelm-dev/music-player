@@ -1,0 +1,357 @@
+/*  Enigmatic Player — "Matrix console" theme
+    Black CRT bezel, mint phosphor text, cyan-green glow accents.        */
+
+Screen {
+    background: #000000;
+    color: #30ffa0;
+}
+
+/* ---------------------------------------------------------------- shell */
+#header {
+    dock: top;
+    height: 1;
+    background: #010502;
+    color: #9dffd0;
+    text-style: bold;
+    border-bottom: heavy #0d3a22;
+}
+
+#body {
+    height: 1fr;
+}
+
+#sidebar {
+    width: 24;
+    dock: left;
+    background: #030a05;
+    border-right: heavy #0d3a22;
+    padding: 0 1;
+}
+
+.source-title {
+    color: #1c7d4e;
+    text-style: bold;
+    padding: 1 0 0 0;
+}
+
+/* ------------------------------------------------------------- buttons */
+Button {
+    background: #06120b;
+    color: #2bff96;
+    border: none;
+    text-style: bold;
+}
+Button:hover,
+Button:focus {
+    background: #0c2a18;
+    color: #e6fff3;
+    border: none;
+}
+Button.success {
+    background: #062015;
+    color: #31ffa8;
+    border: round #1fff9d;
+}
+Button.success:hover {
+    background: #0c3a24;
+}
+
+Button.side {
+    width: 100%;
+    margin: 0 0 1 0;
+    background: #06120b;
+    color: #1f9c63;
+    border: none;
+    text-align: left;
+    padding: 0 1;
+}
+Button.side:hover {
+    background: #0c2a18;
+    color: #e6fff3;
+}
+Button.side.active {
+    background: #0b2a18;
+    color: #e6fff3;
+    text-style: bold;
+    border-left: heavy #31ffa8;
+}
+
+.helpbox {
+    color: #1c7d4e;
+    margin-top: 1;
+}
+
+/* ---------------------------------------------------------------- main */
+#main {
+    height: 1fr;
+}
+
+#searchbar {
+    dock: top;
+    margin: 0 0 1 0;
+}
+Input {
+    background: #010402;
+    border: round #143d26;
+    color: #2bff96;
+}
+Input:focus {
+    border: round #31ffa8;
+    text-style: bold;
+    background: #030d06;
+}
+Input .input-placeholder {
+    color: #1c7d4e;
+}
+
+#listhost {
+    height: 1fr;
+    overflow-y: auto;
+}
+TrackList {
+    height: 1fr;
+    border: heavy #0d3a22;
+    padding: 0 1;
+    background: #000000;
+}
+
+#queue-view {
+    display: none;
+}
+#queue-view.visible {
+    display: block;
+}
+#list-view.invisible {
+    display: none;
+}
+
+LinkedList {
+    background: transparent;
+}
+ListView {
+    background: transparent;
+}
+ListView > .list-view--line {
+    color: #2bff96;
+}
+ListView > .list-view--highlight {
+    background: #0c2415;
+    color: #e6fff3;
+    text-style: bold;
+}
+ListView > .list-view--highlight > Label {
+    background: #0c2415;
+}
+
+/* ----------------------------------------------------------- now playing */
+#nowplaying {
+    dock: bottom;
+    height: 16;
+    background: #020703;
+    border-top: double #1fff9d;
+    padding: 0 2;
+}
+
+#art-wrap {
+    width: 16;
+    height: 12;
+    margin: 1 1 1 0;
+    border: tall #1fff9d;
+    padding: 0 0 0 0;
+    background: #000000;
+    align: center middle;
+}
+#art {
+    max-width: 14;
+}
+
+.np-meta {
+    width: 1fr;
+    height: auto;
+    align: left top;
+    padding: 0 1;
+}
+.np-title {
+    color: #2bff96;
+    text-style: bold;
+    text-overflow: ellipsis;
+    height: 1;
+    padding-top: 1;
+}
+.np-title.idle {
+    color: #1c7d4e;
+}
+.np-artist {
+    color: #23c97a;
+    height: 1;
+}
+.np-album {
+    color: #1c7d4e;
+    height: 1;
+}
+.np-progress {
+    margin-top: 1;
+    height: 1;
+}
+#np-eq {
+    margin-top: 1;
+}
+#np-status {
+    color: #23c97a;
+    height: 1;
+    margin-top: 1;
+}
+#np-status.playing {
+    color: #31ffa8;
+    text-style: bold;
+}
+#np-fxstate {
+    color: #7dffbf;
+    height: 1;
+    margin-top: 1;
+}
+
+/* -------------------------------------------------------------- knobs */
+.np-transport {
+    width: 42;
+    max-width: 44;
+    content-align: right middle;
+    height: auto;
+}
+.pt-row {
+    height: auto;
+    content-align: center middle;
+    padding: 1 0;
+}
+.np-transport Button {
+    min-width: 8;
+}
+.pt-row Button {
+    width: 1fr;
+}
+.np-transport Button.toggled {
+    background: #0c3a24;
+    color: #e6fff3;
+    border: round #1fff9d;
+}
+.Button--variant-success.pt-play {
+    min-width: 8;
+}
+.pt-pitch {
+    margin-top: 1;
+    width: 40;
+    min-width: 18;
+}
+
+Slider {
+    height: 1;
+    margin: 0 0 1 0;
+}
+Slider:focus .slider-bar {
+    color: #ff6ec7;
+    background: #071a10;
+}
+Slider .slider-bar {
+    height: 1;
+    color: #30ffa0;
+}
+
+Header {
+    background: #010502;
+    color: #9dffd0;
+    text-style: bold;
+}
+
+Footer {
+    background: #010502;
+    color: #2bff96;
+}
+Footer > .footer--key {
+    color: #31ffa8;
+    background: #071710;
+}
+Footer > .footer--key:hover {
+    background: #0f3a24;
+}
+
+/* ----------------------------------------------------------- playlist & track row */
+.track-row {
+    width: 100%;
+    height: 1;
+    layout: horizontal;
+}
+.track-main {
+    width: 1fr;
+    padding-right: 1;
+}
+.heart-btn {
+    width: 3;
+    min-width: 3;
+    background: transparent;
+    color: #ff6ec7;
+    border: none;
+    padding: 0;
+}
+.heart-btn:hover {
+    color: #ff99dd;
+    text-style: bold;
+}
+.heart-btn:disabled {
+    color: #0d3a22;
+}
+.remove-btn {
+    width: 3;
+    min-width: 3;
+    background: transparent;
+    color: #ff6ec7;
+    border: none;
+    padding: 0;
+}
+.remove-btn:hover {
+    color: #ff99dd;
+    text-style: bold;
+}
+
+/* playlist sidebar */
+#playlist-sidebar {
+    margin-top: 1;
+    height: auto;
+}
+#playlist-sidebar .source-title {
+    margin-top: 1;
+}
+#playlist-list {
+    background: transparent;
+    height: auto;
+    border: none;
+}
+#playlist-list > .list-view--line {
+    color: #2bff96;
+}
+#playlist-list > .list-view--highlight {
+    background: #0c2415;
+    color: #e6fff3;
+    text-style: bold;
+}
+#btn-new-playlist {
+    margin-top: 1;
+}
+
+/* dialog */
+.dialog {
+    width: 50;
+    height: auto;
+    background: #030a05;
+    border: heavy #31ffa8;
+    padding: 1 2;
+    align: center middle;
+}
+.dialog-title {
+    color: #31ffa8;
+    text-style: bold;
+    margin-bottom: 1;
+    text-align: center;
+}
+.dialog Input {
+    width: 100%;
+}
