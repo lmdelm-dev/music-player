@@ -106,6 +106,15 @@ if sys.platform == "win32":
     import ctypes
     from ctypes import wintypes
 
+    class _OVERLAPPED(ctypes.Structure):
+        _fields_ = [
+            ("Internal", ctypes.c_void_p),
+            ("InternalHigh", ctypes.c_void_p),
+            ("Offset", wintypes.DWORD),
+            ("OffsetHigh", wintypes.DWORD),
+            ("hEvent", wintypes.HANDLE),
+        ]
+
     class _PipeIPC(_IPCBase):
         def __init__(self, name: str) -> None:
             self._name = name
@@ -113,6 +122,7 @@ if sys.platform == "win32":
             self._k32 = ctypes.WinDLL("kernel32", use_last_error=True)
 
         def connect(self) -> None:
+            invalid = wintypes.HANDLE(-1).value
             for _ in range(400):
                 handle = self._k32.CreateFileW(
                     self._name,
@@ -120,10 +130,13 @@ if sys.platform == "win32":
                     0,
                     None,
                     3,  # OPEN_EXISTING
-                    0,
+                    0x40000000,  # FILE_FLAG_OVERLAPPED for concurrent RW
                     None,
                 )
-                if handle != wintypes.HANDLE(-1).value:
+                # CreateFileW returns INVALID_HANDLE_VALUE (-1) on failure;
+                # ctypes may return it as -1 (signed) or 0xFFFFFFFF... (unsigned),
+                # so check both representations.
+                if handle != invalid and handle != -1:
                     self._handle = handle
                     return
                 time.sleep(0.05)
@@ -132,23 +145,61 @@ if sys.platform == "win32":
         def send_raw(self, payload: str) -> None:
             data = payload.encode("utf-8")
             written = wintypes.DWORD(0)
-            ok = self._k32.WriteFile(self._handle, data, len(data), ctypes.byref(written), None)
-            if not ok:
-                raise MpvError("Failed writing to mpv pipe")
+            ov = _OVERLAPPED()
+            ov.hEvent = self._k32.CreateEventW(None, True, False, None)
+            try:
+                ok = self._k32.WriteFile(
+                    self._handle, data, len(data), ctypes.byref(written), ctypes.byref(ov)
+                )
+                if not ok:
+                    err = ctypes.get_last_error()
+                    if err == 997:  # ERROR_IO_PENDING
+                        res = self._k32.WaitForSingleObject(ov.hEvent, 5000)
+                        if res != 0:  # WAIT_OBJECT_0
+                            raise MpvError("mpv pipe write timed out")
+                        ok2 = self._k32.GetOverlappedResult(
+                            self._handle, ctypes.byref(ov), ctypes.byref(written), False
+                        )
+                        if not ok2:
+                            raise MpvError("Failed writing to mpv pipe")
+                    else:
+                        raise MpvError("Failed writing to mpv pipe")
+            finally:
+                self._k32.CloseHandle(ov.hEvent)
 
         def recv_until_newline(self) -> str:
             buf = ctypes.create_string_buffer(65536)
-            read = wintypes.DWORD(0)
             out = []
             while True:
-                ok = self._k32.ReadFile(
-                    self._handle, buf, len(buf), ctypes.byref(read), None
-                )
-                if not ok:
-                    raise OSError("mpv pipe closed")
-                out.append(buf.raw[: read.value].decode("utf-8", "replace"))
-                if b"\n" in buf.raw[: read.value]:
-                    break
+                read = wintypes.DWORD(0)
+                ov = _OVERLAPPED()
+                ov.hEvent = self._k32.CreateEventW(None, True, False, None)
+                try:
+                    ok = self._k32.ReadFile(
+                        self._handle, buf, len(buf), ctypes.byref(read), ctypes.byref(ov)
+                    )
+                    if not ok:
+                        err = ctypes.get_last_error()
+                        if err == 997:  # ERROR_IO_PENDING
+                            res = self._k32.WaitForSingleObject(ov.hEvent, 30000)
+                            if res != 0:
+                                raise MpvError("timed out waiting for mpv IPC data")
+                            ok2 = self._k32.GetOverlappedResult(
+                                self._handle, ctypes.byref(ov), ctypes.byref(read), False
+                            )
+                            if not ok2:
+                                raise OSError("mpv pipe closed")
+                        else:
+                            raise OSError("mpv pipe closed")
+                    # success, read.value bytes available
+                    if read.value == 0:
+                        raise OSError("mpv pipe closed")
+                    chunk = buf.raw[: read.value]
+                    out.append(chunk.decode("utf-8", "replace"))
+                    if b"\n" in chunk:
+                        break
+                finally:
+                    self._k32.CloseHandle(ov.hEvent)
             text = "".join(out)
             return text.split("\n")[0]  # single complete line
 
