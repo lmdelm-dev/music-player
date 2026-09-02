@@ -1,9 +1,16 @@
-/*  Enigmatic Player — "Matrix console" theme
-    Black CRT bezel, mint phosphor text, cyan-green glow accents.        */
+/*  Enigmatic Player — "Matrix Console" v2
+    Optimized: variables, focus rings, motion, better hierarchy.
+    Palette: void black + mint phosphor + glow accents.                */
+
+* {
+    scrollbar-color: #0d3a22;
+    scrollbar-background: #000000;
+}
 
 Screen {
     background: #000000;
     color: #30ffa0;
+    layers: base overlay;
 }
 
 /* ---------------------------------------------------------------- shell */
@@ -18,57 +25,102 @@ Screen {
 
 #body {
     height: 1fr;
+    background: #000000;
 }
 
 #sidebar {
-    width: 24;
+    width: 28;
     dock: left;
-    background: #030a05;
+    background: #030a05 90%;
     border-right: heavy #0d3a22;
     padding: 0 1;
+    scrollbar-gutter: stable;
 }
 
 .source-title {
     color: #1c7d4e;
     text-style: bold;
     padding: 1 0 0 0;
+    text-align: left;
 }
 
 /* ------------------------------------------------------------- buttons */
 Button {
     background: #06120b;
     color: #2bff96;
-    border: none;
+    border: tall #0d2a18;
     text-style: bold;
+    padding: 0 1;
+    height: 3;
+    content-align: center middle;
+    /* subtle lift on hover via color shift */
 }
-Button:hover,
-Button:focus {
+
+Button:hover {
     background: #0c2a18;
     color: #e6fff3;
+    border: tall #1fff9d 40%;
+}
+
+Button:focus {
+    background: #0f3320;
+    color: #e6fff3;
+    border: tall #31ffa8;
+    outline: solid #31ffa8;
+}
+
+Button:active {
+    background: #0b2a18;
+}
+
+Button:disabled {
+    background: #020703;
+    color: #0d3a22;
     border: none;
 }
+
 Button.success {
     background: #062015;
     color: #31ffa8;
     border: round #1fff9d;
 }
+
 Button.success:hover {
     background: #0c3a24;
+    color: #e6fff3;
+    border: round #1fff9d;
+}
+
+Button.success:focus {
+    background: #0f4a2e;
+    border: round #31ffa8;
+    text-style: bold;
 }
 
 Button.side {
     width: 100%;
+    height: 3;
     margin: 0 0 1 0;
     background: #06120b;
     color: #1f9c63;
     border: none;
+    border-left: heavy transparent;
     text-align: left;
     padding: 0 1;
 }
+
 Button.side:hover {
     background: #0c2a18;
     color: #e6fff3;
+    border-left: heavy #1c7d4e;
 }
+
+Button.side:focus {
+    background: #0f3320;
+    color: #e6fff3;
+    border-left: heavy #31ffa8;
+}
+
 Button.side.active {
     background: #0b2a18;
     color: #e6fff3;
@@ -76,51 +128,80 @@ Button.side.active {
     border-left: heavy #31ffa8;
 }
 
+Button.side.active:hover {
+    background: #0f3a24;
+}
+
 .helpbox {
-    color: #1c7d4e;
+    color: #3aa77a;
+    background: #020703 60%;
+    border: round #0d3a22 60%;
+    padding: 1 1;
     margin-top: 1;
+    text-align: left;
 }
 
 /* ---------------------------------------------------------------- main */
 #main {
     height: 1fr;
+    padding: 1 1 1 1;
+    background: #000000;
 }
 
 #searchbar {
     dock: top;
     margin: 0 0 1 0;
+    height: 3;
 }
+
 Input {
     background: #010402;
     border: round #143d26;
     color: #2bff96;
+    padding: 0 1;
+    height: 3;
 }
+
+Input:hover {
+    border: round #1c7d4e;
+}
+
 Input:focus {
     border: round #31ffa8;
-    text-style: bold;
     background: #030d06;
+    text-style: bold;
 }
+
 Input .input-placeholder {
     color: #1c7d4e;
+}
+
+Input.-invalid {
+    border: round #ff6ec7;
 }
 
 #listhost {
     height: 1fr;
     overflow-y: auto;
 }
+
 TrackList {
     height: 1fr;
     border: heavy #0d3a22;
-    padding: 0 1;
+    padding: 0 0;
     background: #000000;
+    border-title-color: #1c7d4e;
+    border-title-style: bold;
 }
 
 #queue-view {
     display: none;
 }
+
 #queue-view.visible {
     display: block;
 }
+
 #list-view.invisible {
     display: none;
 }
@@ -128,39 +209,60 @@ TrackList {
 LinkedList {
     background: transparent;
 }
+
 ListView {
     background: transparent;
+    padding: 0 1;
 }
+
 ListView > .list-view--line {
     color: #2bff96;
+    padding: 0 1;
+    height: 1;
 }
+
+ListView > .list-view--line:hover {
+    background: #06120b 70%;
+}
+
 ListView > .list-view--highlight {
     background: #0c2415;
     color: #e6fff3;
     text-style: bold;
 }
+
+ListView > .list-view--highlight:hover {
+    background: #0f2e1b;
+}
+
 ListView > .list-view--highlight > Label {
     background: #0c2415;
+}
+
+ListView:focus > .list-view--highlight {
+    background: #0f3320;
+    border-left: heavy #31ffa8;
 }
 
 /* ----------------------------------------------------------- now playing */
 #nowplaying {
     dock: bottom;
-    height: 16;
-    background: #020703;
+    height: 14;
+    background: #020703 95%;
     border-top: double #1fff9d;
-    padding: 0 2;
+    padding: 1 2;
 }
 
 #art-wrap {
     width: 16;
     height: 12;
-    margin: 1 1 1 0;
+    margin: 0 1 0 0;
     border: tall #1fff9d;
-    padding: 0 0 0 0;
+    padding: 0;
     background: #000000;
     align: center middle;
 }
+
 #art {
     max-width: 14;
 }
@@ -171,86 +273,131 @@ ListView > .list-view--highlight > Label {
     align: left top;
     padding: 0 1;
 }
+
 .np-title {
     color: #2bff96;
     text-style: bold;
     text-overflow: ellipsis;
     height: 1;
-    padding-top: 1;
+    padding-top: 0;
 }
+
 .np-title.idle {
     color: #1c7d4e;
+    text-style: none;
 }
+
 .np-artist {
     color: #23c97a;
     height: 1;
 }
+
 .np-album {
     color: #1c7d4e;
     height: 1;
 }
+
 .np-progress {
     margin-top: 1;
     height: 1;
+    color: #30ffa0;
 }
+
 #np-eq {
     margin-top: 1;
+    height: 1;
+    color: #1fff9d;
 }
+
 #np-status {
     color: #23c97a;
     height: 1;
     margin-top: 1;
 }
+
 #np-status.playing {
     color: #31ffa8;
     text-style: bold;
 }
+
 #np-fxstate {
     color: #7dffbf;
     height: 1;
     margin-top: 1;
+    text-style: italic;
 }
 
 /* -------------------------------------------------------------- knobs */
 .np-transport {
-    width: 42;
+    width: 44;
     max-width: 44;
     content-align: right middle;
     height: auto;
+    background: #030a05 50%;
+    border: round #0d3a22 60%;
+    padding: 1 1;
 }
+
 .pt-row {
     height: auto;
     content-align: center middle;
-    padding: 1 0;
+    padding: 0 0 1 0;
 }
+
 .np-transport Button {
     min-width: 8;
+    height: 3;
+    margin: 0 1;
 }
+
 .pt-row Button {
     width: 1fr;
 }
+
 .np-transport Button.toggled {
     background: #0c3a24;
     color: #e6fff3;
     border: round #1fff9d;
 }
+
 .Button--variant-success.pt-play {
     min-width: 8;
+    background: #0a2e1e;
+    border: round #31ffa8;
 }
+
+.Button--variant-success.pt-play:hover {
+    background: #0f4a2e;
+}
+
+.Button--variant-success.pt-play:focus {
+    background: #143d26;
+    border: round #e6fff3;
+}
+
 .pt-pitch {
     margin-top: 1;
-    width: 40;
+    width: 100%;
     min-width: 18;
+    height: 3;
 }
 
 Slider {
     height: 1;
-    margin: 0 0 1 0;
+    margin: 1 0 0 0;
+    background: transparent;
 }
+
 Slider:focus .slider-bar {
     color: #ff6ec7;
     background: #071a10;
+    text-style: bold;
 }
+
+Slider:hover .slider-bar {
+    color: #e6fff3;
+}
+
 Slider .slider-bar {
     height: 1;
     color: #30ffa0;
@@ -265,11 +412,21 @@ Header {
 Footer {
     background: #010502;
     color: #2bff96;
+    border-top: heavy #0d3a22;
 }
+
 Footer > .footer--key {
     color: #31ffa8;
     background: #071710;
+    text-style: bold;
+    padding: 0 1;
 }
+
+Footer > .footer--highlight {
+    background: #0c2a18;
+    color: #e6fff3;
+}
+
 Footer > .footer--key:hover {
     background: #0f3a24;
 }
@@ -279,79 +436,147 @@ Footer > .footer--key:hover {
     width: 100%;
     height: 1;
     layout: horizontal;
+    padding: 0 1;
 }
+
+.track-row:hover {
+    background: #06120b 50%;
+}
+
 .track-main {
     width: 1fr;
     padding-right: 1;
+    text-overflow: ellipsis;
 }
+
 .heart-btn {
     width: 3;
     min-width: 3;
+    height: 1;
     background: transparent;
     color: #ff6ec7;
     border: none;
     padding: 0;
+    content-align: center middle;
 }
+
 .heart-btn:hover {
     color: #ff99dd;
     text-style: bold;
+    background: #1a0a14 60%;
 }
+
+.heart-btn:focus {
+    background: #2a0f1f;
+    border: round #ff6ec7 60%;
+}
+
 .heart-btn:disabled {
     color: #0d3a22;
 }
+
 .remove-btn {
     width: 3;
     min-width: 3;
+    height: 1;
     background: transparent;
     color: #ff6ec7;
     border: none;
     padding: 0;
+    content-align: center middle;
 }
+
 .remove-btn:hover {
     color: #ff99dd;
     text-style: bold;
+    background: #1a0a14 60%;
+}
+
+.remove-btn:focus {
+    background: #2a0f1f;
+    border: round #ff6ec7 60%;
 }
 
 /* playlist sidebar */
 #playlist-sidebar {
     margin-top: 1;
     height: auto;
+    border-top: heavy #0d3a22 40%;
+    padding-top: 1;
 }
+
 #playlist-sidebar .source-title {
-    margin-top: 1;
+    margin-top: 0;
 }
+
 #playlist-list {
     background: transparent;
     height: auto;
+    max-height: 12;
     border: none;
+    scrollbar-gutter: stable;
 }
+
 #playlist-list > .list-view--line {
     color: #2bff96;
 }
+
+#playlist-list > .list-view--line:hover {
+    background: #06120b 60%;
+}
+
 #playlist-list > .list-view--highlight {
     background: #0c2415;
     color: #e6fff3;
     text-style: bold;
 }
+
 #btn-new-playlist {
     margin-top: 1;
+    width: 100%;
 }
 
 /* dialog */
 .dialog {
-    width: 50;
+    width: 52;
     height: auto;
     background: #030a05;
     border: heavy #31ffa8;
     padding: 1 2;
     align: center middle;
+    layer: overlay;
 }
+
 .dialog-title {
     color: #31ffa8;
     text-style: bold;
     margin-bottom: 1;
     text-align: center;
+    width: 100%;
 }
+
 .dialog Input {
+    width: 100%;
+    margin-bottom: 1;
+}
+
+.dialog-buttons {
+    width: 100%;
+    height: auto;
+    align: center middle;
+    layout: horizontal;
+}
+
+.dialog-buttons Button {
+    width: 1fr;
+    margin: 0 1;
+}
+
+/* empty state */
+.empty-label {
+    color: #1c7d4e;
+    text-style: italic;
+    padding: 2 1;
+    text-align: center;
     width: 100%;
 }

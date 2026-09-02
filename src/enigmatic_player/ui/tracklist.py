@@ -34,11 +34,16 @@ class TrackListItem(ListItem):
     def compose(self) -> ComposeResult:
         icon = PROVIDER_ICON.get(self.track.provider.value, "•")
         duration = fmt_time(self.track.duration) if self.track.duration else "--:--"
+        # Truncate long fields for terminal width
+        title = self.track.title[:48]
+        artist = (self.track.artist or "").strip()[:28]
+        artist_part = f" — [{GB_MID}]{artist}[/]" if artist else ""
         line = (
             f"[{GB_MID}]{icon}[/] "
-            f"([{GB_MID}]{self.number:>3}[/]) "
-            f"[bold {GB_INK}]{self.track.title}[/]  "
-            f"[{GB_MID}]{duration}[/]"
+            f"[{GB_MID}]{self.number:02d}[/] "
+            f"[bold {GB_INK}]{title}[/]"
+            f"{artist_part} "
+            f"[{GB_INK}]{duration}[/]"
         )
         yield Horizontal(
             Label(line, classes="track-main"),
@@ -59,9 +64,10 @@ class PlaylistListItem(ListItem):
         super().__init__(**kwargs)
 
     def compose(self) -> ComposeResult:
-        name = self.playlist.get("name", "Untitled")
+        name = self.playlist.get("name", "Untitled")[:20]
         count = len(self.playlist.get("tracks", []))
-        yield Label(f"📁 {name}  [{GB_MID}]{count}[/] tracks")
+        # pill-style count
+        yield Label(f"▸ [bold {GB_INK}]{name}[/]  [{GB_MID}]· {count} tracks[/]")
 
 
 class PlaylistTrackItem(ListItem):
@@ -74,11 +80,13 @@ class PlaylistTrackItem(ListItem):
 
     def compose(self) -> ComposeResult:
         duration = fmt_time(self.track.duration) if self.track.duration else "--:--"
+        title = self.track.title[:42]
+        artist = (self.track.artist or "")[:24]
         line = (
-            f"([{GB_MID}]{self.index + 1:>3}[/]) "
-            f"[bold {GB_INK}]{self.track.title}[/]  "
-            f"[{GB_MID}]{self.track.artist}[/]  "
-            f"[{GB_MID}]{duration}[/]"
+            f"[{GB_MID}]{self.index + 1:02d}[/] "
+            f"[bold {GB_INK}]{title}[/]  "
+            f"[{GB_MID}]{artist}[/]  "
+            f"[{GB_INK}]{duration}[/]"
         )
         yield Horizontal(
             Label(line, classes="track-main"),

@@ -62,7 +62,7 @@ class ArtDisplay(Static):
 
 
 class Progress(Static):
-    """Time + animated progress bar."""
+    """Time + animated progress bar — wider, centered, with %."""
 
     position: reactive[float] = reactive(0.0)
     duration: reactive[float] = reactive(0.0)
@@ -72,15 +72,18 @@ class Progress(Static):
         if self.duration <= 0:
             shown = 0.0
             rhs = fmt_time(0)
+            pct = "  0%"
         else:
             shown = min(self.position / self.duration, 1.0)
             rhs = fmt_time(self.duration)
-        width = max(10, int(shown * 28))
+            pct = f"{int(shown*100):3d}%"
+        # 30 cells wide for 80-col layout
+        width = max(10, int(shown * 30))
         fill = "█" * width
-        rest = "░" * max(0, 28 - width)
-        head = "►" if self.active else "•"
+        rest = "░" * max(0, 30 - width)
+        head = "▶" if self.active else "·"
         bar = f"[{GLOW}]{fill}[/][{INK_DIM}]{rest}[/] {head}"
-        return f"[{INK_MID}]{fmt_time(self.position)}[/] {bar} [{INK_MID}]{rhs}[/]"
+        return f"[{INK_MID}]{fmt_time(self.position)}[/] {bar} [{INK_MID}]{rhs}[/] [{INK_DIM}]{pct}[/]"
 
 
 class NowPlaying(Horizontal):
@@ -107,12 +110,12 @@ class NowPlaying(Horizontal):
             yield Label("", id="np-fxstate", classes="np-fxstate")
         with Vertical(id="knobs-panel", classes="np-transport"):
             with Horizontal(classes="pt-row"):
-                yield Button("|◀", id="btn-prev", variant="default")
-                yield Button("▶", id="btn-play", variant="success", classes="pt-play")
-                yield Button("▶|", id="btn-next", variant="default")
+                yield Button("⏮", id="btn-prev", variant="default")
+                yield Button("⏯", id="btn-play", variant="success", classes="pt-play")
+                yield Button("⏭", id="btn-next", variant="default")
             with Horizontal(classes="pt-row"):
-                yield Button("↔", id="btn-shuffle", variant="default")
-                yield Button("↺", id="btn-repeat", variant="default")
+                yield Button("🔀", id="btn-shuffle", variant="default")
+                yield Button("🔁", id="btn-repeat", variant="default")
             yield Slider("VOL", value=100, maximum=100, id="sl-vol", classes="np-knob")
             yield Slider(
                 "SPD",

@@ -37,10 +37,10 @@ class PlaylistInputScreen(ModalScreen[str]):
     def compose(self) -> ComposeResult:
         yield Vertical(
             Label(self._title, classes="dialog-title"),
-            Input(placeholder="Playlist name", value=self._default, id="playlist-input"),
+            Input(placeholder="e.g. Late Night Lofi", value=self._default, id="playlist-input"),
             Horizontal(
-                Button("Create", id="btn-create", variant="success"),
-                Button("Cancel", id="btn-cancel"),
+                Button("✓  Create", id="btn-create", variant="success"),
+                Button("✕  Cancel", id="btn-cancel"),
                 classes="dialog-buttons",
             ),
             classes="dialog",
@@ -126,12 +126,18 @@ class EnigmaticApp(App):
                 yield Label("VIEW", classes="source-title")
                 yield Button("▤  Queue", id="btn-queue", classes="side")
                 yield Label(
-                    "[bold]p[/] play   [bold]n[/]/[bold]b[/] skip\n"
-                    "[bold]/[/] search  [bold]a[/] enqueue  [bold]H[/] ♥ playlist\n"
-                    "[bold]t[/] queue  [bold]h[/] playlists\n"
-                    "[bold]x[/]/[bold]r[/] rand·rep  [bold]N[/]/[bold]R[/]/[bold]D[/] plmgmt\n"
-                    "[bold]←→[/] knobs  [bold]m[/] reverb\n"
-                    "[bold]+[/]/[bold]-[/] volume  [bold]q[/] quit",
+                    "[bold #e6fff3]▶ CONTROLS[/]\n"
+                    "[bold]p[/] play/pause  [bold]n[/]/[bold]b[/] next/prev\n"
+                    "[bold]Enter[/] play  [bold]a[/] enqueue  [bold]c[/] clear\n"
+                    "[bold]j[/]/[bold]k[/] nav  [bold]/[/] search\n"
+                    "[bold #e6fff3]▶ QUEUE[/]\n"
+                    "[bold]t[/] queue  [bold]x[/] shuffle  [bold]r[/] repeat\n"
+                    "[bold #e6fff3]▶ PLAYLISTS[/]\n"
+                    "[bold]h[/] browse  [bold]H[/] ♥ add  [bold]N[/] new\n"
+                    "[bold]R[/] rename  [bold]D[/] delete\n"
+                    "[bold #e6fff3]▶ FX[/]\n"
+                    "[bold]←→[/] adjust  [bold]m[/] reverb  [bold]y[/] pitch\n"
+                    "[bold]+[/]/[bold]-[/] vol  [bold]q[/] quit",
                     classes="helpbox",
                 )
             with Vertical(id="main"):
